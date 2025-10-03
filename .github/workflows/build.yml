@@ -3,7 +3,7 @@ name: Build site from Google Sheet
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"  # every 6 hours; adjust as needed
+    - cron: "0 */6 * * *"
 
 permissions:
   contents: write
@@ -11,28 +11,46 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Render HTML from Google Sheet
-        run: |
-          python -V
-          python scripts/render.py
-
-      - name: Commit and push if changed
+      - name: Configure Git user
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Rebase on latest remote
+        run: |
+          git checkout "${GITHUB_REF_NAME}"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+
+      - name: Render HTML from Google Sheet
+        run: |
+          python scripts/render.py
+
+      - name: Commit changes if any
+        run: |
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Update site from Google Sheet"
-            git push
           fi
+
+      - name: Push changes
+        if: ${{ success() }}
+        run: |
+          # Push with rebase to avoid non-fast-forward
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push origin "${GITHUB_REF_NAME}"
