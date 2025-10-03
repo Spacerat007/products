@@ -11,8 +11,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout (full history, writable)
+      - name: Checkout (full history)
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,12 +30,15 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Sync with remote (rebase)
+      - name: Ensure branch is current
         run: |
-          # Ensure we're on the branch the workflow runs on
-          git checkout "${GITHUB_REF_NAME}"
-          # Get latest remote changes and rebase our local copy
-          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          # Determine branch to operate on
+          BRANCH="${GITHUB_REF_NAME}"
+          echo "Working branch: $BRANCH"
+          git fetch origin "$BRANCH"
+          # Start from latest remote
+          git checkout "$BRANCH"
+          git reset --hard "origin/$BRANCH"
 
       - name: Render HTML from Google Sheet
         run: |
@@ -49,7 +53,11 @@ jobs:
             git commit -m "Update site from Google Sheet"
           fi
 
-      - name: Push changes (with rebase to avoid non-fast-forward)
+      - name: Push changes (force-with-lease safe push)
         run: |
-          git pull --rebase origin "${GITHUB_REF_NAME}" || true
-          git push origin "${GITHUB_REF_NAME}"
+          BRANCH="${GITHUB_REF_NAME}"
+          # Re-check remote and rebase just in case something landed during the run
+          git fetch origin "$BRANCH"
+          git rebase "origin/$BRANCH" || true
+          # Use --force-with-lease: safe fast-forward/force if no one else pushed while we were running
+          git push --force-with-lease origin "$BRANCH"
