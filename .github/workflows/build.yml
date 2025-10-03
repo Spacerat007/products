@@ -11,9 +11,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
+      - name: Checkout (full history, writable)
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -24,22 +23,24 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Configure Git user
+      - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      - name: Rebase on latest remote
+      - name: Sync with remote (rebase)
         run: |
+          # Ensure we're on the branch the workflow runs on
           git checkout "${GITHUB_REF_NAME}"
+          # Get latest remote changes and rebase our local copy
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
 
       - name: Render HTML from Google Sheet
         run: |
           python scripts/render.py
 
-      - name: Commit changes if any
+      - name: Commit changes (if any)
         run: |
           git add -A
           if git diff --cached --quiet; then
@@ -48,9 +49,7 @@ jobs:
             git commit -m "Update site from Google Sheet"
           fi
 
-      - name: Push changes
-        if: ${{ success() }}
+      - name: Push changes (with rebase to avoid non-fast-forward)
         run: |
-          # Push with rebase to avoid non-fast-forward
           git pull --rebase origin "${GITHUB_REF_NAME}" || true
           git push origin "${GITHUB_REF_NAME}"
