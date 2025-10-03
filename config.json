@@ -1,0 +1,11 @@
+{
+  "csv_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vReNzK1M4TMReVlF8-FRcRTgdmRu6_oR2Rf0VAI6U7AALpSBuWnP73A25BGFt_vuxiW3FRNbIwYEmIQ/pub?gid=0&single=true&output=csv",
+  "output_file": "index.html",
+  "site_title": "Products",
+  "card": {
+    "title_col": "Products",
+    "description_col": "Description",
+    "price_col": "Price",
+    "image_url_col": "Image URL"
+  }
+}
