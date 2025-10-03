@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Products</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --card-gap: 16px;
+      --card-width: 320px;
+      --bg: #f7f7f9;
+      --text: #222;
+      --muted: #555;
+      --border: #e2e2e8;
+      --accent: #2b74ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    header {
+      padding: 24px 16px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+    header .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0;
+    }
+    main {
+      padding: 24px 16px 48px;
+    }
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
+      gap: var(--card-gap);
+      align-items: stretch;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #fafafa;
+    }
+    .card-body {
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1 1 auto;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+      line-height: 1.3;
+    }
+    .card-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .card-price {
+      margin-top: auto;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 16px;
+    }
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 13px;
+      padding: 24px 16px 40px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Products</h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <article class="card">
+  <img class="card-img" src="https://veranohill.com/cdn/shop/files/Marseille-2.jpg?v=1756763423&width=500" alt=" image" loading="lazy" />
+  <div class="card-body">
+    <h2 class="card-title"></h2>
+    <div class="card-desc">The Marseille Handbag is the epitome of elegance and luxury.</div>
+    <div class="card-price">$215</div>
+  </div>
+</article>
+<article class="card">
+  <img class="card-img" src="https://img.ltwebstatic.com/images3_spmp/2024/09/20/35/1726817075fc4eb4f8ee35756461b1a1a026c10e57_thumbnail_405x.jpg" alt=" image" loading="lazy" />
+  <div class="card-body">
+    <h2 class="card-title"></h2>
+    <div class="card-desc">Crossbody Ladies</div>
+    <div class="card-price">$38.36</div>
+  </div>
+</article>
+<article class="card">
+  <img class="card-img" src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTcTtl-j_vGuaVJyAVc39ukhtOmHQm4g-CZW6EgallIpgO8H5MTKNREFsaue3Ytzj7iwByykpZ_11CoFY2AsFElUhx4pTALxpfhW-2CSqBiZLgeYoEYtAM2ZCCj" alt=" image" loading="lazy" />
+  <div class="card-body">
+    <h2 class="card-title"></h2>
+    <div class="card-desc">Coach Mollie Signature Canvas Tote Bag</div>
+    <div class="card-price">$510</div>
+  </div>
+</article>
+    </div>
+  </main>
+
+  <footer>
+    Static HTML generated from Google Sheets at build time. View source to see the baked-in markup.
+  </footer>
+</body>
+</html>
